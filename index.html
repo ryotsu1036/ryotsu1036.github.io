@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bitter:100,300,400,500,700,900|Material+Icons">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css">
+</head>
+<body>
+    <section id="freecell">
+        <div id="polygon-wrap">
+            <div id="polygon">
+                <h1>Free cell</h1>
+
+                <div class="buttons">
+                    <button type="button" class="button is-rounded" @click="newGame()">New Game</button><br><br>
+                    <button type="button" class="button is-rounded">Restart</button>
+                </div>
+
+                <div id="info">
+                    <a href="javascript: void(0);">
+                        <div class="info-text">Help</div>
+                        <i class="fas fa-info is-circled"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-viewer">
+            <div class="screen">
+                <button type="button" class="button is-rounded hint">Hint</button>
+
+                <div id="result">
+                    <div>
+                        Score: <span class="text-bold">0</span>
+                    </div>
+                    <div>
+                        Move: <span class="text-bold">62</span>
+                    </div>
+                    <a href="javascript: void(0);">
+                        <i class="material-icons is-circled">pause</i>
+                    </a>
+                    <a href="javascript: void(0);">
+                        <i class="material-icons is-circled">replay</i>
+                    </a>
+                </div>
+            </div>
+
+            <div id="main">
+                <div class="grid"></div>
+                <div class="grid"></div>
+                <div class="grid"></div>
+                <div class="grid"></div>
+                <div class="grid none text-bold" style="vertical-align: middle;">
+                    <div id="time">Time</div>
+                    <button type="button" class="button is-rounded hint cursor-default">03:34</button></div>
+                <div class="grid"></div>
+                <div class="grid"></div>
+                <div class="grid"></div>
+                <div class="grid"></div>
+            </div>
+
+            <div id="cards-viewer">
+                <div class="cards" v-for="shuffle in shuffles">
+                    <img v-for="num in shuffle" :src="'./src/images/2x/freecell-' + num + '@2x.png'" class="card">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="./dist/index.bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        new Vue({
+            el: '#freecell',
+            data: {
+                shuffles: [],
+                cards: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52],
+                pulls: [7, 7, 7, 7, 6, 6, 6, 6]
+            },
+            created() {
+                this.newGame();
+            },
+            methods: {
+                newGame() {
+                    let begin = 0;
+                    let end = 0;
+                    this.shuffles = [];
+
+                    this.cards.sort(() => { return Math.random() - 0.5; });
+                    this.pulls.sort(() => { return Math.random() - 0.5; });
+
+                    this.pulls.forEach((value, key) => {
+                        if (key === 0) {
+                            end += value;
+                        } else {
+                            begin = end;
+                            end += value;
+                        }
+
+                        this.shuffles.push(this.cards.slice(begin, end));
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
